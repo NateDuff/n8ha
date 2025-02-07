@@ -12,7 +12,7 @@ on:
 jobs:
   buildKraken:
     name: Build Kraken
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Set up Go
@@ -28,11 +28,11 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-kraken
-        path: ./ha/kraken.exe
+        path: ./ha/kraken
 
   buildMonitor:
     name: Build Monitor
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -49,4 +49,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: build-monitor
-        path: ./ha/monitor.exe
+        path: ./ha/monitor
