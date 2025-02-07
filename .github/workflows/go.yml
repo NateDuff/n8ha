@@ -21,13 +21,14 @@ jobs:
         go-version: '1.23'
 
     - name: Build
-      run: go build -v ./ha/kraken
+      run: go build -v ./kraken
+      working-directory: ./ha
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: ./kraken.exe
+        path: ./ha/kraken.exe
 
   buildMonitor:
     name: Build Monitor
@@ -41,10 +42,11 @@ jobs:
         go-version: '1.23'
 
     - name: Build
-      run: go build -v ./ha/monitor
+      run: go build -v ./monitor
+      working-directory: ./ha
 
     - name: Archive production artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build
-        path: ./monitor.exe
+        path: ./ha/monitor.exe
