@@ -1,0 +1,11 @@
+FROM golang:1.23.5 AS builder
+WORKDIR /build
+COPY ./ ./
+RUN go mod download
+RUN CGO_ENABLED=0 go build -o ./main
+
+FROM gcr.io/distroless/static-debian12
+WORKDIR /app
+COPY --from=builder /build/main ./main
+#EXPOSE 80
+ENTRYPOINT ["./main"]
