@@ -10,7 +10,7 @@
             "console": "integratedTerminal",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/ha-monitor",
+            "program": "${workspaceFolder}/ha/monitor",
             "envFile": "${workspaceFolder}/ha/.env",
             "args": [],
             "buildFlags": ""
@@ -21,7 +21,7 @@
             "console": "integratedTerminal",
             "request": "launch",
             "mode": "auto",
-            "program": "${workspaceFolder}/ha-kraken",
+            "program": "${workspaceFolder}/ha/kraken",
             "envFile": "${workspaceFolder}/ha/.env",
             "args": [],
             "buildFlags": ""
