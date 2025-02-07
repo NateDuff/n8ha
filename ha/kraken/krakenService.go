@@ -1,4 +1,4 @@
-package ha
+package main
 
 import (
 	"fmt"
@@ -10,13 +10,13 @@ import (
 	krakenapi "github.com/beldur/kraken-go-api-client"
 )
 
-// KrakenService represents the Kraken API service
-type KrakenService struct {
+// krakenService represents the Kraken API service
+type krakenService struct {
 	api *krakenapi.KrakenAPI
 }
 
-// NewKrakenService creates a new instance of KrakenService
-func NewKrakenService() *KrakenService {
+// newKrakenService creates a new instance of KrakenService
+func newKrakenService() krakenService {
 	apiKey := os.Getenv("KRAKEN_API_KEY")
 	apiSecret := os.Getenv("KRAKEN_API_SECRET")
 
@@ -26,7 +26,7 @@ func NewKrakenService() *KrakenService {
 
 	api := krakenapi.New(apiKey, apiSecret)
 
-	return &KrakenService{
+	return krakenService{
 		api: api,
 	}
 }
@@ -93,8 +93,8 @@ func calculateTotalUSD(api *krakenapi.KrakenAPI, balances map[string]string) (fl
 	return totalUSD, nil
 }
 
-// GetTotalWalletValue fetches the total wallet value in USD
-func GetTotalWalletValue(svc *KrakenService) (float64, error) {
+// getTotalWalletValue fetches the total wallet value in USD
+func (svc *krakenService) getTotalWalletValue() (float64, error) {
 	balances, err := getBalance(svc.api)
 	if err != nil {
 		return 0, err

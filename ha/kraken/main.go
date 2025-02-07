@@ -20,10 +20,10 @@ func publishToMQTT(svc ha.MqttService, topic string, totalUSD float64) {
 
 func main() {
 	svc := ha.NewMqttService()
-	krakenSvc := ha.NewKrakenService()
-	reportInterval := 5 // Default reporting interval in minutes
+	krakenSvc := newKrakenService()
+	reportInterval := 5
 
-	totalUSD, err := ha.GetTotalWalletValue(krakenSvc)
+	totalUSD, err := krakenSvc.getTotalWalletValue()
 	if err != nil {
 		log.Fatalf("Failed to get wallet total: %v", err)
 	}
