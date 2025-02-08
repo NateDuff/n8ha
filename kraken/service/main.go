@@ -1,4 +1,4 @@
-package main
+package service
 
 import (
 	"fmt"
@@ -15,8 +15,8 @@ type krakenService struct {
 	api *krakenapi.KrakenAPI
 }
 
-// newKrakenService creates a new instance of KrakenService
-func newKrakenService() krakenService {
+// NewKrakenService creates a new instance of KrakenService
+func NewKrakenService() krakenService {
 	apiKey := os.Getenv("KRAKEN_API_KEY")
 	apiSecret := os.Getenv("KRAKEN_API_SECRET")
 
@@ -93,8 +93,8 @@ func calculateTotalUSD(api *krakenapi.KrakenAPI, balances map[string]string) (fl
 	return totalUSD, nil
 }
 
-// getTotalWalletValue fetches the total wallet value in USD
-func (svc *krakenService) getTotalWalletValue() (float64, error) {
+// GetTotalWalletValue fetches the total wallet value in USD
+func (svc *krakenService) GetTotalWalletValue() (float64, error) {
 	balances, err := getBalance(svc.api)
 	if err != nil {
 		return 0, err

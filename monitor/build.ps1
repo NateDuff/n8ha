@@ -2,7 +2,7 @@ $currentDir = Get-Location
 
 Set-Location "$PSScriptRoot\.."
 
-docker build -t pc-monitor . --build-arg FOLDERNAME=monitor --build-arg FINALIMAGE=gcr.io/distroless/static-debian12
+docker build -t pc-monitor -f Monitor.Dockerfile ./monitor
 
 docker tag pc-monitor:latest duffnath/duffhome-monitor:latest
 

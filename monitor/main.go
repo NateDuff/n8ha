@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"monitor/metrics"
 	"os"
 	"strings"
 	"time"
@@ -28,7 +29,7 @@ func main() {
 	}
 
 	for {
-		PublishMetrics(*svc, mqttTopic)
+		metrics.PublishMetrics(*svc, mqttTopic)
 		time.Sleep(time.Duration(reportInterval) * time.Second)
 	}
 }

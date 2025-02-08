@@ -7,6 +7,8 @@ import (
 	"log"
 	"time"
 
+	"kraken/service"
+
 	ha "github.com/NateDuff/n8ha"
 )
 
@@ -20,10 +22,10 @@ func publishToMQTT(svc ha.MqttService, topic string, totalUSD float64) {
 
 func main() {
 	svc := ha.NewMqttService()
-	krakenSvc := newKrakenService()
+	krakenSvc := service.NewKrakenService()
 	reportInterval := 5
 
-	totalUSD, err := krakenSvc.getTotalWalletValue()
+	totalUSD, err := krakenSvc.GetTotalWalletValue()
 	if err != nil {
 		log.Fatalf("Failed to get wallet total: %v", err)
 	}

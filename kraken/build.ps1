@@ -2,7 +2,7 @@ $currentDir = Get-Location
 
 Set-Location "$PSScriptRoot\.."
 
-docker build -t duffraken . --build-arg FOLDERNAME=kraken
+docker build -t duffraken -f Kraken.Dockerfile ./kraken
 
 docker tag duffraken:latest duffnath/duffraken:latest
 
