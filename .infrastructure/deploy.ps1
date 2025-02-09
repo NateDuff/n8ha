@@ -8,7 +8,7 @@ param (
 
 $ErrorActionPreference = "Stop"
 
-Connect-AzAccount -Subscription $SubscriptionId -UseDeviceAuthentication | Out-Null
+Connect-AzAccount -Subscription $SubscriptionId -Tenant "c4afa44d-3294-4c39-b063-0593f7ae69d4" | Out-Null
 
 $deployParams = @{
     Name = "deploy-rustdesk"
