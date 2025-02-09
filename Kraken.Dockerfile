@@ -4,7 +4,7 @@ COPY ./ ./
 RUN go mod tidy
 RUN CGO_ENABLED=0 go build ./main.go
 
-FROM scratch
+FROM gcr.io/distroless/static-debian12
 WORKDIR /app
 COPY --from=builder /build .
 #EXPOSE 80

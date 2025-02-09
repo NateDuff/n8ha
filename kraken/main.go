@@ -25,14 +25,14 @@ func main() {
 	krakenSvc := service.NewKrakenService()
 	reportInterval := 5
 
-	totalUSD, err := krakenSvc.GetTotalWalletValue()
-	if err != nil {
-		log.Fatalf("Failed to get wallet total: %v", err)
-	}
-
-	fmt.Printf("Total Wallet Value in USD: $%.2f\n", totalUSD)
-
 	for {
+		totalUSD, err := krakenSvc.GetTotalWalletValue()
+		if err != nil {
+			log.Fatalf("Failed to get wallet total: %v", err)
+		}
+
+		fmt.Printf("Total Wallet Value in USD: $%.2f\n", totalUSD)
+
 		publishToMQTT(*svc, "homeassistant/kraken/values", totalUSD)
 		time.Sleep(time.Duration(reportInterval) * time.Minute)
 	}
