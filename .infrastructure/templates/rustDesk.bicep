@@ -153,3 +153,7 @@ resource hbbr 'Microsoft.App/containerApps@2023-05-01' = {
     }
   }
 }
+
+
+// 192.168.4.153 - UXAF6L2W4uJlVRY90SnSrmqdaio6O+Xd+PePYQbzDk4=
+// 23.96.241.171 -  WsVrl83CvxG98HlFdUPLaYF23VVjJrZO0IVbp5+kIzE=

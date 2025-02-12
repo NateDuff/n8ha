@@ -9,7 +9,7 @@ resource backupRg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
 }
 
-module backup './backup.bicep' = {
+module backup './templates/backup.bicep' = {
   name: 'backup'
   scope: backupRg
   params: {
@@ -23,7 +23,7 @@ module backup './backup.bicep' = {
 //   location: location
 // }
 
-// module rustDesk './rustDesk.bicep' = {
+// module rustDesk './templates/rustDesk.bicep' = {
 //   name: 'rustDesk'
 //   scope: rustDeskRg
 //   params: {
