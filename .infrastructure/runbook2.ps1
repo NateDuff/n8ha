@@ -1,0 +1,57 @@
+$ErrorActionPreference = "Stop"
+$WarningPreference = "SilentlyContinue"
+
+Connect-AzAccount -Identity -AccountId "b277e475-ba40-4952-849e-56d08df4443d" | Out-Null
+
+# $privateKeyValue = Get-AzKeyVaultSecret -VaultName "kv-dcs-internal" -Name "MSI" -AsPlainText
+
+# Get-AzKeyVaultKey -VaultName "kv-dcs-internal" -Name "MSI" -OutFile "$ENV:TEMP\publicKey.pem"
+
+## Create a new certificate using the publicKey & private keys
+
+# Function to extract key contents from a PEM file
+
+# Read private key and public key contents
+# $publicKeyBase64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0DBixPOzkdxy2+vTmL2vyJocw1AxviakLlerLyMK6so/dwBpzUJqMPyk+2EjMzzlAW07Zg8j/0l7d1bnIQWVtOgydkgy6CWLYAQkFcmQXbRUHBko3A2cPFnX8OBwrY2kSKCn51/+YkNg8JrdCs7AVlZrxqPUjlSK90r/LDTAfB64GE4RjU43+zxkoR943tDF0ZbndP2/HeTVILmHSxh0hpbVWy0ox6hRA9ZgAPIoQunHTHofF9ea21tCCGrN3YIN640FTUeCRu94gOPl22ANob0mRhKrNXYFaEitJ4XKwbMx9S6S0nbekiPMvkM7/i9WfYOFwYiehWsvfuhr5U37lQIDAQAB"
+# $secret = "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"
+
+# # Convert Base64-encoded keys to byte arrays
+# $privateKeyBytes = [Convert]::FromBase64String($privateKeyValue)
+# $publicKeyBytes = [Convert]::FromBase64String($publicKeyBase64)
+
+# # Create an X509 certificate from the public key
+# $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList ([System.Text.Encoding]::UTF8.GetString($publicKeyBytes))
+
+# # Import the private key into an RSA provider
+# $rsa = [System.Security.Cryptography.RSA]::Create()
+# $rsa.ImportPkcs8PrivateKey($privateKeyBytes, [ref]$null)
+
+# # Attach the private key to the certificate
+# $certWithPrivateKey = $certificate.CopyWithPrivateKey($rsa)
+
+# # Export the certificate with private key
+# $pfxPath = "$ENV:TEMP\certificate.pfx"
+# [System.IO.File]::WriteAllBytes($pfxPath, $certWithPrivateKey.Export([System.Security.Cryptography.X509Certificates.X509ContentType]::Pfx))
+
+# Write-Output "Certificate with private key exported to: $pfxPath"
+
+
+Disconnect-AzAccount
+
+$certArgs = @($certPath.FullName, $null, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::MachineKeySet)
+
+$cert = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2 -ArgumentList $certArgs
+
+$connArgs = @{
+    CertificatePath = "$ENV:TEMP\pk.key"
+    #CertificatePassword = $ENV:CERT_PASSWORD
+    ApplicationId = "a048a641-afb4-4666-831c-907a4f612331"
+    TenantId = "1d122f81-68ca-4aeb-91cd-0d1a6029e07b"
+    Subscription = "8c73818d-17aa-49c4-8876-c9a53f09ba11"
+}
+
+Connect-AzAccount -ServicePrincipal @connArgs | Out-Null
+
+$tokenResults = Get-AzAccessToken -ResourceUrl "499b84ac-1321-427f-aa17-267ca6975798"
+
+Write-Output $tokenResults.Token
