@@ -1,9 +1,14 @@
 package metrics
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math"
+	"os"
+	"strconv"
+	"strings"
 
 	ha "github.com/NateDuff/n8ha"
 
@@ -12,11 +17,64 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
+const gpuStatsFile = "/srv/gpu_stats.txt"
+
 // SystemMetrics represents the system metrics to be published
 type SystemMetrics struct {
 	CPUUsage    float64 `json:"cpu_usage"`
 	MemoryUsage float64 `json:"memory_usage"`
 	DiskUsage   float64 `json:"disk_usage"`
+}
+
+// GPUMetrics represents the GPU metrics to be published
+type GPUMetrics struct {
+	GPUTemperature float64 `json:"gpu_temperature"`
+	GPUUsage       float64 `json:"gpu_usage"`
+}
+
+// stringsToFloat converts a string to a float64
+func stringsToFloat(s string) float64 {
+	f, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		fmt.Printf("Error converting string to float: %v\n", err)
+	}
+	return f
+}
+
+// getGPUMetrics retrieves the GPU metrics
+func getGPUMetrics() (*GPUMetrics, error) {
+	file, err := os.Open(gpuStatsFile)
+	if err != nil {
+		fmt.Printf("Error reading GPU stats file: %v\n", err)
+		return nil, err
+	}
+	defer file.Close()
+
+	tempInC := 0.0
+	utilization := 0.0
+	scanner := bufio.NewScanner(file)
+	if scanner.Scan() {
+		data := strings.TrimSpace(scanner.Text())
+		fields := strings.Split(data, ", ")
+		if len(fields) != 2 {
+			fmt.Println("Unexpected file format")
+			return nil, fmt.Errorf("unexpected file format")
+		}
+
+		tempInC = stringsToFloat(fields[0])
+		utilization = stringsToFloat(fields[1])
+	} else {
+		fmt.Println("No data found in GPU stats file")
+	}
+
+	tempInFehrenheit := (1.8 * tempInC) + 32
+
+	metrics := &GPUMetrics{
+		GPUTemperature: math.Round(tempInFehrenheit*100) / 100,
+		GPUUsage:       utilization,
+	}
+
+	return metrics, nil
 }
 
 // getSystemMetrics retrieves the system metrics
@@ -48,21 +106,35 @@ func getSystemMetrics() (*SystemMetrics, error) {
 	return metrics, nil
 }
 
-// PublishMetrics publishes the system metrics to the specified MQTT topic
-func PublishMetrics(svc ha.MqttService, topic string) {
-	metrics, err := getSystemMetrics()
+// PublishMetrics publishes both system and GPU metrics to the specified MQTT topics
+func PublishMetrics(svc ha.MqttService, systemTopic string, gpuTopic string) {
+	// Get and publish system metrics
+	systemMetrics, err := getSystemMetrics()
 	if err != nil {
 		log.Printf("Error retrieving system metrics: %v", err)
-		return
+	} else {
+		systemPayload, err := json.Marshal(systemMetrics)
+		if err != nil {
+			log.Printf("Error encoding system metrics JSON: %v", err)
+		} else {
+			token := svc.Client.Publish(systemTopic, 0, false, systemPayload)
+			token.Wait()
+			log.Printf("Published system metrics: %s", systemPayload)
+		}
 	}
 
-	payload, err := json.Marshal(metrics)
+	// Get and publish GPU metrics
+	gpuMetrics, err := getGPUMetrics()
 	if err != nil {
-		log.Printf("Error encoding JSON: %v", err)
-		return
+		log.Printf("Error retrieving GPU metrics: %v", err)
+	} else {
+		gpuPayload, err := json.Marshal(gpuMetrics)
+		if err != nil {
+			log.Printf("Error encoding GPU metrics JSON: %v", err)
+		} else {
+			token := svc.Client.Publish(gpuTopic, 0, false, gpuPayload)
+			token.Wait()
+			log.Printf("Published GPU metrics: %s", gpuPayload)
+		}
 	}
-
-	token := svc.Client.Publish(topic, 0, false, payload)
-	token.Wait()
-	log.Printf("Published metrics: %s", payload)
 }

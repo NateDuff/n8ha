@@ -22,7 +22,6 @@ require (
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/keybase/go-keychain v0.0.0-20250124001843-7f41edfa9689 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
-	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	golang.org/x/crypto v0.33.0 // indirect
 	golang.org/x/net v0.34.0 // indirect

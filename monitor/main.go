@@ -25,11 +25,11 @@ func main() {
 
 	mqttTopic := os.Getenv("MQTT_TOPIC")
 	if mqttTopic == "" {
-		mqttTopic = "homeassistant/" + strings.ToLower(hostname) + "/system_metrics"
+		mqttTopic = "homeassistant/" + strings.ToLower(hostname)
 	}
 
 	for {
-		metrics.PublishMetrics(*svc, mqttTopic)
+		metrics.PublishMetrics(*svc, mqttTopic+"/system_metrics", mqttTopic+"/gpu_metrics")
 		time.Sleep(time.Duration(reportInterval) * time.Second)
 	}
 }
